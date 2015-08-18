@@ -21,7 +21,7 @@ module.exports = (grunt) ->
         files: ['bootstrap/less/**/*.less']
         tasks: ["bootstrap"]
       server:
-        files: ['src/server/**/*.coffee', 'src/common/**', 'src/server/**/*.cjsx']
+        files: ['src/server/**', 'src/common/**']
         tasks: ["build-server"]
       client:
         files: ['src/client/**', 'src/public/**']

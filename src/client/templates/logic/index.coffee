@@ -27,15 +27,18 @@ postJSON = (target, data) ->
 
 module.exports = {
   store: store
-  actions: actions
+#  actions: actions
   selectors: selectors
   templates:
     modify: (data) ->
+      console.log "modify", data
       {id, name, fieldDefinition, data} = data
       dirty = true
+      
       store.dispatch actions.SET_TEMPLATE({id, name, fieldDefinition, data, dirty})
 
     load: () ->
+      console.log "load"
       return fetch('/api/templates')
         .then checkStatus
         .then parseJSON
@@ -44,10 +47,13 @@ module.exports = {
             templates: json
           })
     save: (id) ->
+      console.log "save"
       module.exports.templates.upsert store.getState().get("templates").get(id)
     create: (name) ->
+      console.log "create"
       module.exports.templates.upsert { name: name, fieldDefinition: {}, data: ""  }
     upsert: (data) ->
+      console.log "upsert"
       {id, name, fieldDefinition, data} = data
       return postJSON("/api/templates", {id, name, fieldDefinition, data})
         .then checkStatus
@@ -55,18 +61,24 @@ module.exports = {
         .then (json) ->
           store.dispatch actions.SET_TEMPLATE(json)
     delete: (id) ->
+      console.log "delete"
       return fetch("/api/templates/#{id}", {
         method: "delete"
       })
         .then checkStatus
         .then () ->
           store.dispatch actions.DELETE_TEMPLATE(id)
+    select: (id) ->
+      console.log "select", id
+      store.dispatch actions.SELECT_TEMPLATE(id)
     deleteField: (id, key) ->
+      console.log "deleteField"
       template = store.getState().get("templates").get(id)
       delete template.fieldDefinition[key]
       module.exports.templates.modify template
       
     addField: (id, key, value) ->
+      console.log "addField"
       template = store.getState().get("templates").get(id)
       template.fieldDefinition[key] = value
       module.exports.templates.modify template

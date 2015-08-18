@@ -24,19 +24,19 @@ AddRecord = React.createClass {
       keyValue: ""
       value: "String"
     }, () =>
-      logic.templates.addField(@props.id, key, value)
+      return logic.templates.addField(@props.id, key, value)
 
 
 
   render: () ->
     <Row>
-      <Input ref="txtKey" type="text" className="col-xs-5" value={@state.keyValue} onChange={@onKeyChange} />
-      <Input ref="selValue" type="select" className="col-xs-5" value={@state.value} onChange={@onValueChange}>
+      <Input ref="txtKey" label="Key Name" type="text" groupClassName="col-xs-12" value={@state.keyValue} onChange={@onKeyChange} />
+      <Input ref="selValue" label="Key Type" type="select" groupClassName="col-xs-12" value={@state.value} onChange={@onValueChange}>
         <option value="String">{"String"}</option>
         <option value="parseInt">{"Integer"}</option>
         <option value="parseFloat">{"Float"}</option>
       </Input>
-      <Button onClick={@onAddField} bsSize="small" bsStyle="primary" className="col-xs-offset-1 col-xs-1"><i className="fa fa-fw fa-floppy-o"/></Button>
+      <Button onClick={@onAddField} bsSize="small" bsStyle="primary" className="col-xs-12"><i className="fa fa-fw fa-floppy-o"/>{"Add"}</Button>
     </Row>
 }
 

@@ -6,6 +6,8 @@ app = module.exports = loopback()
 
 app.start = ->
   # start the web server
+  
+  console.log 'Web server listening at: %s', app.get('url')
   app.listen ->
     app.emit 'started'
     console.log 'Web server listening at: %s', app.get('url')

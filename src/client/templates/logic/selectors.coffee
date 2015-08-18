@@ -16,7 +16,8 @@ selectors = {
 
 templateList = immutableCreateSelector selectors.all, (state) ->
   return {
-    templates: state.get('templates')
+    templates: state.get('templates').sortBy (i) ->
+      return i.id
     currentTemplateId: state.get('currentTemplate')?.get('id')
   }
 

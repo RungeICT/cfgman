@@ -43080,7 +43080,7 @@
 	  onSelectTemplate: function(id) {
 	    return (function(_this) {
 	      return function(e) {
-	        return _this.props.dispatch(actions.SELECT_TEMPLATE(id));
+	        return templates.select(id);
 	      };
 	    })(this);
 	  },
@@ -43184,11 +43184,11 @@
 	
 	module.exports = {
 	  store: store,
-	  actions: actions,
 	  selectors: selectors,
 	  templates: {
 	    modify: function(data) {
 	      var dirty, fieldDefinition, id, name, ref;
+	      console.log("modify", data);
 	      ref = data, id = ref.id, name = ref.name, fieldDefinition = ref.fieldDefinition, data = ref.data;
 	      dirty = true;
 	      return store.dispatch(actions.SET_TEMPLATE({
@@ -43200,6 +43200,7 @@
 	      }));
 	    },
 	    load: function() {
+	      console.log("load");
 	      return fetch('/api/templates').then(checkStatus).then(parseJSON).then(function(json) {
 	        return store.dispatch(actions.SET_TEMPLATE_ARR({
 	          templates: json
@@ -43207,9 +43208,11 @@
 	      });
 	    },
 	    save: function(id) {
+	      console.log("save");
 	      return module.exports.templates.upsert(store.getState().get("templates").get(id));
 	    },
 	    create: function(name) {
+	      console.log("create");
 	      return module.exports.templates.upsert({
 	        name: name,
 	        fieldDefinition: {},
@@ -43218,6 +43221,7 @@
 	    },
 	    upsert: function(data) {
 	      var fieldDefinition, id, name, ref;
+	      console.log("upsert");
 	      ref = data, id = ref.id, name = ref.name, fieldDefinition = ref.fieldDefinition, data = ref.data;
 	      return postJSON("/api/templates", {
 	        id: id,
@@ -43229,20 +43233,27 @@
 	      });
 	    },
 	    "delete": function(id) {
+	      console.log("delete");
 	      return fetch("/api/templates/" + id, {
 	        method: "delete"
 	      }).then(checkStatus).then(function() {
 	        return store.dispatch(actions.DELETE_TEMPLATE(id));
 	      });
 	    },
+	    select: function(id) {
+	      console.log("select", id);
+	      return store.dispatch(actions.SELECT_TEMPLATE(id));
+	    },
 	    deleteField: function(id, key) {
 	      var template;
+	      console.log("deleteField");
 	      template = store.getState().get("templates").get(id);
 	      delete template.fieldDefinition[key];
 	      return module.exports.templates.modify(template);
 	    },
 	    addField: function(id, key, value) {
 	      var template;
+	      console.log("addField");
 	      template = store.getState().get("templates").get(id);
 	      template.fieldDefinition[key] = value;
 	      return module.exports.templates.modify(template);
@@ -56507,7 +56518,9 @@
 	templateList = immutableCreateSelector(selectors.all, function(state) {
 	  var ref;
 	  return {
-	    templates: state.get('templates'),
+	    templates: state.get('templates').sortBy(function(i) {
+	      return i.id;
+	    }),
 	    currentTemplateId: (ref = state.get('currentTemplate')) != null ? ref.get('id') : void 0
 	  };
 	});
@@ -56617,12 +56630,14 @@
 	  onEditorChange: function(data) {
 	    var fieldDefinition, id, name, ref1;
 	    ref1 = this.props.currentTemplate, id = ref1.id, name = ref1.name, fieldDefinition = ref1.fieldDefinition;
-	    return logic.templates.modify({
-	      id: id,
-	      name: name,
-	      fieldDefinition: fieldDefinition,
-	      data: data
-	    });
+	    if (data !== this.props.currentTemplate.data) {
+	      return logic.templates.modify({
+	        id: id,
+	        name: name,
+	        fieldDefinition: fieldDefinition,
+	        data: data
+	      });
+	    }
 	  },
 	  render: function() {
 	    var saveButton;
@@ -78294,13 +78309,13 @@
 	    return React.createElement(Row, null, React.createElement(Input, {
 	      "ref": "txtKey",
 	      "type": "text",
-	      "className": "col-xs-5",
+	      "groupClassName": "col-xs-5",
 	      "value": this.state.keyValue,
 	      "onChange": this.onKeyChange
 	    }), React.createElement(Input, {
 	      "ref": "selValue",
 	      "type": "select",
-	      "className": "col-xs-5",
+	      "groupClassName": "col-xs-5",
 	      "value": this.state.value,
 	      "onChange": this.onValueChange
 	    }, React.createElement("option", {

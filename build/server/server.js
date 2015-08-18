@@ -8,6 +8,7 @@
   app = module.exports = loopback();
 
   app.start = function() {
+    console.log('Web server listening at: %s', app.get('url'));
     return app.listen(function() {
       app.emit('started');
       console.log('Web server listening at: %s', app.get('url'));

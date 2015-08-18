@@ -14,9 +14,10 @@ module.exports = connect(logic.selectors.currentTemplate) React.createClass {
 
   onEditorChange: (data) ->
     {id, name, fieldDefinition} = @props.currentTemplate
-    logic.templates.modify {
-      id, name, fieldDefinition, data
-    }
+    if data != @props.currentTemplate.data
+      logic.templates.modify {
+        id, name, fieldDefinition, data
+      }
 
 
 

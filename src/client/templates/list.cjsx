@@ -8,7 +8,7 @@ module.exports = connect(selectors.templateList) React.createClass {
 
   onSelectTemplate: (id) ->
     return (e) =>
-      return @props.dispatch actions.SELECT_TEMPLATE(id)
+      return templates.select(id)
   onDeleteTemplate: (id) ->
     return (e) =>
       return templates.delete(id)
