@@ -36,5 +36,9 @@
   "template": {
     "dataSource": "pg",
     "public": true
+  },
+  "device": {
+    "dataSource": "pg",
+    "public": true
   }
 }

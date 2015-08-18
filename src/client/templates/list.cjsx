@@ -1,7 +1,7 @@
 {Col, Row, ListGroup, ListGroupItem, Button} = require "react-bootstrap"
 React = require "react"
 { connect  } = require "react-redux"
-{templates, selectors, actions} = require "./logic"
+{templates, selectors, actions} = require "../logic"
 
 
 module.exports = connect(selectors.templateList) React.createClass {

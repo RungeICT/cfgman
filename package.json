@@ -2,7 +2,7 @@
   "name": "junoconf",
   "version": "1.0.0",
   "description": "",
-  "main": "build/server",
+  "main": "build/server/server",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -44,6 +44,7 @@
     "react-bootstrap": "^0.24.5",
     "react-redux": "^0.9.0",
     "react-router": "^0.13.3",
+    "react-router-bootstrap": "^0.18.1",
     "redux": "^1.0.1",
     "redux-immutable": "^1.2.3",
     "redux-logger": "0.0.3",

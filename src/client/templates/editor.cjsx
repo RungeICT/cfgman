@@ -5,7 +5,7 @@ AceEditor  = require('react-ace');
 require('brace/mode/ejs')
 require('brace/theme/github')
 
-logic = require "./logic"
+logic = require "../logic"
 
 module.exports = connect(logic.selectors.currentTemplate) React.createClass {
   onClickSave: () ->

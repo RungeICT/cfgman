@@ -1,0 +1,35 @@
+{
+  "name": "template",
+  "plural": "templates",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "fieldDefinition": {
+      "type": "object",
+      "required": true,
+      "postgresql": {
+        "dataType": "jsonb",
+        "nullable": "NO"
+      }
+    },
+    "data": {
+      "type": "string",
+      "required": false,
+      "postgresql": {
+        "dataType": "text",
+        "nullable": "NO"
+      }
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}

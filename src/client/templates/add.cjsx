@@ -1,7 +1,7 @@
 {Input, Button} = require "react-bootstrap"
 React = require "react"
 
-logic = require "./logic"
+logic = require "../logic"
 
 
 module.exports = React.createClass {
@@ -20,7 +20,7 @@ module.exports = React.createClass {
     @setState {
       value: ""
     }, () =>
-      logic.templates.create name
+      return logic.templates.create name
 
   render: () ->
     button = <Button onClick={@onAddClick} bsStyle="info">{"Add"}</Button>

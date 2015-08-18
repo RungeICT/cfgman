@@ -4,12 +4,12 @@
     "connector": "memory"
   },
   "pg": {
-    "name": "pg",
-    "connector": "postgresql",
     "host": "127.0.0.1",
     "port": 5432,
     "database": "cfgman",
     "username": "cfgman",
-    "password": "cfgman"
+    "password": "cfgman",
+    "name": "pg",
+    "connector": "postgresql"
   }
 }

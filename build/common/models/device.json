@@ -1,0 +1,41 @@
+{
+  "name": "device",
+  "plural": "devices",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "fieldValues": {
+      "type": "object",
+      "required": true,
+      "postgresql": {
+        "dataType": "jsonb",
+        "nullable": "NO"
+      }
+    },
+    "data": {
+      "type": "string",
+      "required": false,
+      "postgresql": {
+        "dataType": "text",
+        "nullable": "NO"
+      }
+    }
+  },
+  "validations": [],
+  "relations": {
+    "template": {
+      "type": "belongsTo",
+      "model": "template",
+      "foreignKey": ""
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

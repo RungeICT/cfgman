@@ -8,8 +8,7 @@ TemplateEditor = require "./editor"
 TemplateAdd = require "./add"
 TemplateFields = require "./fields"
 
-{store, templates} = require "./logic"
-
+{store, templates} = require "../logic"
 
 App = React.createClass {
   render: () ->
@@ -27,10 +26,10 @@ App = React.createClass {
             </Col>
           </Row>
         </Col>
-        <Col xs={12} sm={8}>
+        <Col xs={12} sm={7}>
           <TemplateEditor />
         </Col>
-        <Col xs={12} md={2}>
+        <Col xs={12} md={3}>
           <TemplateFields />
         </Col>
       </Row>

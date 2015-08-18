@@ -1,7 +1,7 @@
 React = require "react"
-{Input, Row, Col, Button} = require "react-bootstrap"
+{Input, Row, Col, Button, Table} = require "react-bootstrap"
 { connect  } = require "react-redux"
-logic = require "./logic"
+logic = require "../logic"
 
 AddRecord = React.createClass {
   getInitialState: () ->
@@ -11,12 +11,12 @@ AddRecord = React.createClass {
     }
   onKeyChange: () ->
     @setState {
-      keyValue: @ref.txtKey.getValue()
+      keyValue: @refs.txtKey.getValue()
     }
 
   onValueChange: () ->
     @setState {
-      value: @ref.selValue.getValue()
+      value: @refs.selValue.getValue()
     }
   onAddField: () ->
     {keyValue, value} = @state
@@ -24,7 +24,7 @@ AddRecord = React.createClass {
       keyValue: ""
       value: "String"
     }, () =>
-      return logic.templates.addField(@props.id, key, value)
+      return logic.templates.addField(@props.id, keyValue, value)
 
 
 
@@ -47,24 +47,44 @@ AddRecord = React.createClass {
 module.exports = connect(logic.selectors.currentTemplate) React.createClass {
   onDeleteField: (key) ->
     () =>
-      logic.templates.deleteField(@props.currentTemplate.id, key, value)
+      logic.templates.deleteField(@props.currentTemplate.id, key)
   render: () ->
     if !@props.currentTemplate?
       return <div/>
 
-    rows = [<AddRecord key="newFields" id={@props.currentTemplate.id} />]
-    for k,v in @props.currentTemplate.fieldDefinition
-      rows.push <Row key={"field-#{k}"}>
-        <Col xs={5}>
+    rows = []
+
+    for k,v of @props.currentTemplate.fieldDefinition
+      rows.push <tr key={"field-#{k}"}>
+        <td>
           {k}
-        </Col>
-        <Col xs={5}>
+        </td>
+        <td>
           {v}
-        </Col>
-        <Button onClick={@onDeleteField(k)} bsSize="small" bsStyle="primary" className="col-xs-offset-1 col-xs-1"><i className="fa fa-fw fa-trash-o"/></Button>
-      </Row>
-    <div>
-      {rows}
+        </td>
+        <td>
+          <Button onClick={@onDeleteField(k)} bsSize="small" bsStyle="primary" className="col-xs-12">
+            <i className="fa fa-fw fa-trash-o"/>
+          </Button>
+        </td>
+      </tr>
+
+    return <div>
+      <AddRecord key="newFields" id={@props.currentTemplate.id} />
+      <Table>
+        <thead>
+          <th>
+            {"Key Name"}
+          </th>
+          <th>
+            {"Key Type"}
+          </th>
+          <th></th>
+        </thead>
+        <tbody>
+          {rows}
+        </tbody>
+      </Table>
     </div>
 
 }
