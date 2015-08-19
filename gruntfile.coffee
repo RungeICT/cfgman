@@ -43,12 +43,19 @@ module.exports = (grunt) ->
       "build-dev":
         devtool: "sourcemap"
         debug: true
+    notify_hooks:
+      options:
+        enabled: true
+        success: true # whether successful grunt executions should be notified automatically
+        #max_jshint_notifications: 5, // maximum number of notifications from jshint output
+        #title: "Project Name", // defaults to the name in package.json, or will use project directory's name
+        #duration: 3 // the duration of notification in seconds, for `notify-send only
 
   }
   require('load-grunt-tasks')(grunt)
 
 
-  grunt.registerTask 'bootstrap', ['grunt:bootstrap','copy:bootstrap']
-  grunt.registerTask 'build-server', ['cjsx', "copy:src"]
-  grunt.registerTask 'build-client', ['copy:bootstrap','webpack', "copy:src"]
+  grunt.registerTask 'bootstrap', ['grunt:bootstrap','copy:bootstrap', "notify_hooks"]
+  grunt.registerTask 'build-server', ['cjsx', "copy:src", "notify_hooks"]
+  grunt.registerTask 'build-client', ['copy:bootstrap','webpack', "copy:src", "notify_hooks"]
   grunt.registerTask 'default', '', [ 'build' ]

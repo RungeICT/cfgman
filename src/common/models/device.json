@@ -11,7 +11,7 @@
       "type": "string",
       "required": true
     },
-    "fieldValues": {
+    "system": {
       "type": "object",
       "required": true,
       "postgresql": {
@@ -19,7 +19,15 @@
         "nullable": "NO"
       }
     },
-    "data": {
+    "fields": {
+      "type": "object",
+      "required": true,
+      "postgresql": {
+        "dataType": "jsonb",
+        "nullable": "NO"
+      }
+    },
+    "config": {
       "type": "string",
       "required": false,
       "postgresql": {

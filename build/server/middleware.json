@@ -22,7 +22,7 @@
     }
   },
   "final": {
-    "loopback#urlNotFound": {}
+    "./middleware/render": {}
   },
   "final:after": {
     "errorhandler": {}

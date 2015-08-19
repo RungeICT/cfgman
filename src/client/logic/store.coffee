@@ -1,15 +1,27 @@
 Immutable = require "immutable"
 reducers = require "./reducers"
-{ createStore, applyMiddleware } = require 'redux';
+{ createStore, applyMiddleware, compose } = require 'redux';
 thunk = require "redux-thunk"
 logger = require "redux-logger"
+{ devTools, persistState } = require 'redux-devtools';
+
 
 initialState = Immutable.fromJS {
-  templates: {}
-  devices: {}
-  currentTemplate: null
-  currentDevice: null
+  router: {}
+  app:
+    templates: {}
+    devices: {}
+    currentTemplate: null
+    currentDevice: null
 }
 
-createStoreWithMiddleware = applyMiddleware(thunk, logger)(createStore);
-module.exports = createStoreWithMiddleware reducers, initialState
+finalCreateStore = compose(
+  applyMiddleware(thunk),
+  devTools(),
+  persistState(window.location.href.match(/[?&]debug_session=([^&]+)\b/)),
+  createStore
+);
+
+
+# createStoreWithMiddleware = applyMiddleware(thunk, logger)(createStore);
+module.exports = finalCreateStore reducers, initialState

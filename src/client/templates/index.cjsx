@@ -1,53 +1,31 @@
 React = require "react"
 Immutable = require "immutable"
-{ Provider  } = require "react-redux"
 {Col, Row} = require "react-bootstrap"
 #------ Controls
 TemplateList = require "./list"
 TemplateEditor = require "./editor"
 TemplateAdd = require "./add"
-TemplateFields = require "./fields"
 
-{store, templates} = require "../logic"
+Panel = require "../shared/panel"
 
-App = React.createClass {
+module.exports = React.createClass {
   render: () ->
+    headerRight = <TemplateAdd />
     <div className="container-fluid">
       <Row>
         <Col xs={12} sm={4} md={2}>
-          <Row>
-            <Col xs={12}>
-              <TemplateAdd />
-            </Col>
-          </Row>
-          <Row>
-            <Col xs={12}>
-              <TemplateList />
-            </Col>
-          </Row>
+          <Panel headerLeft={"Templates"} headerRight={headerRight}>
+            <Row>
+              <Col xs={12}>
+                <TemplateList />
+              </Col>
+            </Row>
+          </Panel>
         </Col>
-        <Col xs={12} sm={7}>
-          <TemplateEditor />
-        </Col>
-        <Col xs={12} md={3}>
-          <TemplateFields />
+        <Col xs={12} sm={8} md={10}>
+          <TemplateEditor/>
         </Col>
       </Row>
     </div>
 
-}
-
-
-module.exports = React.createClass {
-
-  componentWillMount: () ->
-    templates.load()
-
-  initFunc: ->
-    return <App />
-
-  render: () ->
-    <Provider store={store}>
-      {@initFunc}
-    </Provider>
 }

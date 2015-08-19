@@ -1,17 +1,17 @@
-{Col, Row, ListGroup, ListGroupItem, Button} = require "react-bootstrap"
+{Col, Row, ListGroup, ListGroupItem, Button, ButtonGroup, ButtonToolbar} = require "react-bootstrap"
 React = require "react"
 { connect  } = require "react-redux"
 {templates, selectors, actions} = require "../logic"
+{Navigation} = require "react-router"
+DeleteTemplate = require "./delete"
+
 
 
 module.exports = connect(selectors.templateList) React.createClass {
-
+  mixins: [Navigation]
   onSelectTemplate: (id) ->
     return (e) =>
-      return templates.select(id)
-  onDeleteTemplate: (id) ->
-    return (e) =>
-      return templates.delete(id)
+      return @transitionTo "/templates/#{id}"
   onSaveTemplate: (id) ->
     return (e) =>
       return templates.save(id)
@@ -23,7 +23,7 @@ module.exports = connect(selectors.templateList) React.createClass {
         style = "info"
 
       if v.dirty
-        saveButton = <Button onClick={@onSaveTemplate(v.id)} bsSize="small" bsStyle="primary" className="pull-right" >
+        saveButton = <Button onClick={@onSaveTemplate(v.id)} bsSize="small" bsStyle="primary" >
           <i className="fa fa-fw fa-floppy-o" />
         </Button>
 
@@ -31,10 +31,12 @@ module.exports = connect(selectors.templateList) React.createClass {
         <Row>
           <Col xs={12}>
             <div className="pull-left">{v.name}</div>
-            <Button className="pull-right" bsStyle="danger" bsSize="small" onClick={@onDeleteTemplate(v.id)}>
-              <i className="fa fa-fw fa-trash-o"/>
-            </Button>
-            {saveButton}
+            <ButtonToolbar className="pull-right">
+              <ButtonGroup>
+                <DeleteTemplate template={v} noText={true} />
+                {saveButton}
+              </ButtonGroup>
+            </ButtonToolbar>
           </Col>
         </Row>
       </ListGroupItem>

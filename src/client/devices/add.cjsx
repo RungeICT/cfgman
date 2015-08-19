@@ -3,27 +3,69 @@ React = require "react"
 
 logic = require "../logic"
 
+Popup = require "../shared/popup"
+{connect} = require "react-redux"
 
-module.exports = React.createClass {
+module.exports = connect(logic.selectors.templateList) React.createClass {
   getInitialState: ->
     {
-      value: ""
+      templateId: ""
+      name: ""
+      show: false
     }
-
-  onChangeValue: () ->
+  onChangeTemplate: () ->
     @setState {
-      value: @refs.txtName.getValue()
+      templateId: @refs.selTemplates.getValue()
+    }
+  onChangeName: () ->
+    @setState {
+      name: @refs.txtName.getValue()
     }
 
-  onAddClick: () ->
+  onConfirmClick: () ->
     name = @state.value
     @setState {
-      value: ""
+      templateId: ""
+      name: ""
+      show: false
     }, () =>
-      return logic.devices.create name
+      return logic.devices.create name, templateId
+
+  onClose: () ->
+    @setState {
+      show: false
+      name: ""
+      templateId: ""
+    }
+
+  onShowAdd: () ->
+    @setState {
+      show: true
+    }
 
   render: () ->
-    button = <Button onClick={@onAddClick} bsStyle="info">{"Add"}</Button>
-    return <Input ref="txtName" type="text" buttonAfter={button} label="Name" value={@state.value} onChange={@onChangeValue} />
+    #return
+    popup = undefined
+    if @state.show
+      templates = [<option value={""}>{"--- Please Select ---"}</option>]
+      @props.templates.forEach (v, k) ->
+        templates.push <option value={v.id}>{v.name}</option>
+
+      buttons = <div>
+        <Button onClick={@onClose} bsStyle="warning" bsSize="small">{"Cancel"} <i className={"fa fa-fw fa-ban"} /></Button>
+        <Button onClick={@onAddClick} bsStyle="info" bsSize="small">{"Add"}<i className={"fa fa-fw fa-plus"} /></Button>
+      </div>
+      popup = <Popup onClose={@onClose} title={"Add New Device"} buttons={buttons}>
+        <Input ref="txtName" type="text" label="Name" value={@state.name} onChange={@onChangeValue} />
+        <Input ref="selTemplates" type="select" label="Template" value={@state.templateId} onChange={@onChangeTemplate} >
+          {templates}
+        </Input>
+      </Popup>
+
+    return <div>
+      <Button onClick={@onShowAdd} bsStyle="info"  bsSize="small">{"Add"}<i className={"fa fa-fw fa-plus"} /></Button>
+      {popup}
+    </div>
+
 
 }

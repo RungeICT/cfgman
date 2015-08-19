@@ -1,7 +1,10 @@
-{Col, Row, ListGroup, ListGroupItem, Button} = require "react-bootstrap"
+{Col, Row, ListGroup, ListGroupItem, Button, ButtonGroup, ButtonToolbar} = require "react-bootstrap"
 React = require "react"
 { connect  } = require "react-redux"
 {devices, selectors, actions} = require "../logic"
+
+DeleteDevice = require "./delete"
+
 
 
 module.exports = connect(selectors.deviceList) React.createClass {
@@ -9,9 +12,6 @@ module.exports = connect(selectors.deviceList) React.createClass {
   onSelectDevice: (id) ->
     return (e) =>
       return devices.select(id)
-  onDeleteDevice: (id) ->
-    return (e) =>
-      return devices.delete(id)
   onSaveDevice: (id) ->
     return (e) =>
       return devices.save(id)
@@ -23,18 +23,20 @@ module.exports = connect(selectors.deviceList) React.createClass {
         style = "info"
 
       if v.dirty
-        saveButton = <Button onClick={@onSaveDevice(v.id)} bsSize="small" bsStyle="primary" className="pull-right" >
+        saveButton = <Button onClick={@onSaveDevice(v.id)} bsSize="small" bsStyle="primary" >
           <i className="fa fa-fw fa-floppy-o" />
         </Button>
 
-      items.push <ListGroupItem onClick={@onSelectDevice(v.id)} bsStyle={style} href="javascript:;" key={"template-item-#{k}"}>
+      items.push <ListGroupItem onClick={@onSelectDevice(v.id)} bsStyle={style} href="javascript:;" key={"device-item-#{k}"}>
         <Row>
           <Col xs={12}>
             <div className="pull-left">{v.name}</div>
-            <Button className="pull-right" bsStyle="danger" bsSize="small" onClick={@onDeleteDevice(v.id)}>
-              <i className="fa fa-fw fa-trash-o"/>
-            </Button>
-            {saveButton}
+            <ButtonToolbar className="pull-right">
+              <ButtonGroup>
+                <DeleteDevice device={v} noText={true} />
+                {saveButton}
+              </ButtonGroup>
+            </ButtonToolbar>
           </Col>
         </Row>
       </ListGroupItem>

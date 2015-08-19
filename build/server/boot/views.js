@@ -13,10 +13,7 @@
     });
     server.set('view engine', 'ect');
     server.set('views', viewPath);
-    server.engine('ect', ectRenderer.render);
-    return server.get('/', function(req, res) {
-      return res.render('main');
-    });
+    return server.engine('ect', ectRenderer.render);
   };
 
 }).call(this);

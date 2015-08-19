@@ -3,44 +3,6 @@ React = require "react"
 { connect  } = require "react-redux"
 logic = require "../logic"
 
-AddRecord = React.createClass {
-  getInitialState: () ->
-    {
-      keyValue: ''
-      value: "String"
-    }
-  onKeyChange: () ->
-    @setState {
-      keyValue: @refs.txtKey.getValue()
-    }
-
-  onValueChange: () ->
-    @setState {
-      value: @refs.selValue.getValue()
-    }
-  onAddField: () ->
-    {keyValue, value} = @state
-    @setState {
-      keyValue: ""
-      value: "String"
-    }, () =>
-      return logic.templates.addField(@props.id, keyValue, value)
-
-
-
-  render: () ->
-    <Row>
-      <Input ref="txtKey" label="Key Name" type="text" groupClassName="col-xs-12" value={@state.keyValue} onChange={@onKeyChange} />
-      <Input ref="selValue" label="Key Type" type="select" groupClassName="col-xs-12" value={@state.value} onChange={@onValueChange}>
-        <option value="String">{"String"}</option>
-        <option value="parseInt">{"Integer"}</option>
-        <option value="parseFloat">{"Float"}</option>
-      </Input>
-      <Button onClick={@onAddField} bsSize="small" bsStyle="primary" className="col-xs-12"><i className="fa fa-fw fa-floppy-o"/>{"Add"}</Button>
-    </Row>
-}
-
-
 
 
 
@@ -70,7 +32,6 @@ module.exports = connect(logic.selectors.currentTemplate) React.createClass {
       </tr>
 
     return <div>
-      <AddRecord key="newFields" id={@props.currentTemplate.id} />
       <Table>
         <thead>
           <th>

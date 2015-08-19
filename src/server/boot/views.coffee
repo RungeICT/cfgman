@@ -6,5 +6,3 @@ module.exports = (server) ->
   server.set 'view engine', 'ect'
   server.set 'views', viewPath
   server.engine 'ect', ectRenderer.render
-  server.get '/', (req, res) ->
-    res.render 'main'

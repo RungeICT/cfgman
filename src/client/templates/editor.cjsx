@@ -1,15 +1,18 @@
 React = require "react"
 {Row, Col, ButtonToolbar, ButtonGroup, Button} = require "react-bootstrap"
 { connect  } = require "react-redux"
-AceEditor  = require('react-ace');
+Panel = require "../shared/panel"
+TemplateFields = require "./fields"
+DeleteTemplateButton = require "./delete"
+AddFieldsButton = require "./addfields"
+#AceEditor  = require('react-ace');
+AceEditor = require "../shared/ace"
 require('brace/mode/ejs')
-require('brace/theme/github')
-
+require('brace/theme/monokai')
 logic = require "../logic"
 
 module.exports = connect(logic.selectors.currentTemplate) React.createClass {
   onClickSave: () ->
-
     logic.templates.save @props.currentTemplate.id
 
   onEditorChange: (data) ->
@@ -19,28 +22,51 @@ module.exports = connect(logic.selectors.currentTemplate) React.createClass {
         id, name, fieldDefinition, data
       }
 
-
+  onClickDelete: () ->
+    logic.templates.delete @props.currentTemplate.id
 
   render: () ->
     if @props.currentTemplate?
       if @props.currentTemplate.dirty
-        saveButton = <Button onClick={@onClickSave} ><i className="fa fa-fw fa-floppy-o" />{"Save"}</Button>
+        saveButton = <ButtonGroup>
+          <Button onClick={@onClickSave} bsSize="small" bsStyle="primary" >{"Save"}<i className="fa fa-fw fa-floppy-o" /></Button>
+        </ButtonGroup>
 
+      headerRight = <div>
+        <ButtonToolbar>
+          <ButtonGroup>
+            <AddFieldsButton template={@props.currentTemplate} />
+          </ButtonGroup>
+          <ButtonGroup>
+            <DeleteTemplateButton template={@props.currentTemplate} noText={false} />
+          </ButtonGroup>
+          {saveButton}
+        </ButtonToolbar>
+      </div>
       return <div>
-        <Row>
-          <Col xs={12}>
-            <ButtonToolbar>
-              <ButtonGroup>
-                {saveButton}
-              </ButtonGroup>
-            </ButtonToolbar>
-          </Col>
-        </Row>
-        <Row>
-          <Col xs={12}>
-            <AceEditor mode="ejs" theme="github" name="editor" width="100%" value={@props.currentTemplate.data} onChange={@onEditorChange} />
-          </Col>
-        </Row>
+        <Panel headerLeft={@props.currentTemplate.name} headerRight={headerRight}>
+          <Row>
+            <Col xs={12} sm={8} md={9}>
+                <AceEditor
+                  key="#{@props.currentTemplate.id}-editor"
+                  mode="ejs"
+                  theme="monokai"
+                  name="editor"
+                  style= {
+                    width: "100%"
+                    minHeight: 400
+                  }
+                  onSaveCommand={@onClickSave}
+                  value={@props.currentTemplate.data}
+                  isReadOnly={false} onChange={@onEditorChange} />
+            </Col>
+            <Col xs={12} sm={4} md={3}>
+              <Panel>
+                <TemplateFields />
+              </Panel>
+            </Col>
+          </Row>
+        </Panel>
       </div>
     return <div />
 }
